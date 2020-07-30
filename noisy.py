@@ -24,8 +24,6 @@ sine_noise = np.array(sine_noise)
 
 combined = sine_wave + sine_noise
 
-n_frames = n_samples * 2
-
 comptype = 'NONE'
 compname = 'not compressed'
 
@@ -48,4 +46,32 @@ plt.plot(freq)
 plt.title("FFT on combined wave")
 plt.xlim(0, 3000)
 plt.show()
+
+filtered = []
+index = 0
+
+filtered = [f if (950 < index < 1050 and f > 1) else 0 for index, f in enumerate(freq)]
+
+plt.plot(filtered)
+plt.title("Filtered main frequency")
+plt.xlim(0,1200)
+plt.show()
+plt.close()
+
+# inverse FFT - convert back to time domain from frequency domain
+recovered_signal = np.fft.ifft(filtered)
+
+plt.subplot(3,1,1)
+plt.title("Original signal")
+plt.subplots_adjust(hspace=.5)
+plt.plot(sine_wave[:500])
+plt.subplot(3,1,2)
+plt.title("Noisy wave")
+plt.plot(combined[:4000])
+plt.subplot(3,1,3)
+plt.title("Recovered filtered signal")
+plt.plot(recovered_signal[:500])
+plt.show()
+
+
 
